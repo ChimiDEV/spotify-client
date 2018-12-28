@@ -11,9 +11,9 @@ beforeEach(async () => {
     spotifyClient = new SpotifyClient(
       process.env.SPOTIFY_ID,
       process.env.SPOTIFY_SECRET,
+      process.env.SPOTIFY_LOCALE,
       ['playlist-modify-public'],
-      'http://localhost:8081/api/spotify/authorization',
-      process.env.SPOTIFY_LOCALE
+      'http://localhost:8081/api/spotify/authorization'
     );
 
     await spotifyClient.Session.clientAuthorization();

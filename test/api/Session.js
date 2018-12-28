@@ -6,20 +6,39 @@ const request = require('request-promise-native');
 const Session = require('../../src/api/Session');
 let testSession;
 
-beforeEach(() => {
-  {
-    // Create new Session, no attached client
-    testSession = new Session(
-      {},
-      process.env.SPOTIFY_ID,
-      process.env.SPOTIFY_SECRET,
-      ['playlist-modify-public'],
-      'http://localhost:8081/api/spotify/authorization'
-    );
-  }
-});
-
 describe('Spotify Client - Session', function() {
+  beforeEach(() => {
+    {
+      // Create new Session, no attached client
+      testSession = new Session(
+        {},
+        process.env.SPOTIFY_ID,
+        process.env.SPOTIFY_SECRET,
+        [
+          'playlist-modify-public',
+          'playlist-read-private',
+          'playlist-modify-private',
+          'playlist-read-collaborative',
+          'user-modify-playback-state',
+          'user-read-currently-playing',
+          'user-read-playback-state',
+          'user-top-read',
+          'user-read-recently-played',
+          'app-remote-control',
+          'streaming',
+          'user-read-birthdate',
+          'user-read-email',
+          'user-read-private',
+          'user-follow-read',
+          'user-follow-modify',
+          'user-library-modify',
+          'user-library-read'
+        ],
+        'http://localhost:8081/api/spotify/authorization'
+      );
+    }
+  });
+
   it('Generates Authorization URL', () => {
     const expectedString = `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.SPOTIFY_ID
@@ -56,19 +75,19 @@ describe('Spotify Client - Session', function() {
     expect(JSON.parse(response).id).to.be.equal(process.env.SPOTIFY_USERID);
   });
 
-  it('Retry Request after refreshing client access token', async () =>{
+  it('Retry Request after refreshing client access token', async () => {
     // This method can be used in a catch block, to retry the same request
     const options = {
       url: 'https://api.spotify.com/v1/tracks/3nhJpxZXEQTsZwrDUihXQf',
       mehtod: 'GET'
-    }
+    };
 
     // Requests done by the package are already parsed!
     const response = await testSession.refreshedRetryClient(options);
     expect(response.name).to.be.equal('Drunken Lullabies');
   });
 
-  it('Retry Request after refreshing user access token', async () =>{
+  it('Retry Request after refreshing user access token', async () => {
     // Mock an already happend authorization flow
     testSession.refreshToken = process.env.SPOTIFY_REFRESHTOKEN;
 
@@ -76,7 +95,7 @@ describe('Spotify Client - Session', function() {
     const options = {
       url: 'https://api.spotify.com/v1/me',
       mehtod: 'GET'
-    }
+    };
 
     // Requests done by the package are already parsed!
     const response = await testSession.refreshedRetryUser(options);

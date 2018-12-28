@@ -124,6 +124,18 @@ class Session {
       return Promise.reject(err);
     }
   }
+
+  getClientAuthDetails() {
+    return {
+      bearer: this.clientAccessToken
+    }
+  }
+
+  getUserAuthDetails() {
+    return {
+      bearer: this.accessToken
+    }
+  }
 }
 
 module.exports = Session;
