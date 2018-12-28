@@ -42,7 +42,26 @@ describe('Spotify Client - Session', function() {
   it('Generates Authorization URL', () => {
     const expectedString = `https://accounts.spotify.com/authorize?response_type=code&client_id=${
       process.env.SPOTIFY_ID
-    }&scope=playlist-modify-public&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Fapi%2Fspotify%2Fauthorization`;
+    }&scope=${[
+      'playlist-modify-public',
+      'playlist-read-private',
+      'playlist-modify-private',
+      'playlist-read-collaborative',
+      'user-modify-playback-state',
+      'user-read-currently-playing',
+      'user-read-playback-state',
+      'user-top-read',
+      'user-read-recently-played',
+      'app-remote-control',
+      'streaming',
+      'user-read-birthdate',
+      'user-read-email',
+      'user-read-private',
+      'user-follow-read',
+      'user-follow-modify',
+      'user-library-modify',
+      'user-library-read'
+    ].join('%20')}&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Fapi%2Fspotify%2Fauthorization`;
     const authorizationURL = testSession.generateAuthorizationURL();
     expect(authorizationURL).to.be.equal(expectedString);
   });

@@ -1,7 +1,7 @@
-const request = require('request-promise-native');
-
 const Session = require('./api/Session');
 const Search = require('./api/Search');
+const User = require('./api/User');
+const Playlist = require('./api/Playlist');
 
 class SpotifyClient {
   constructor(clientID, clientSecret, locale, scopes, redirectURL) {
@@ -13,13 +13,12 @@ class SpotifyClient {
     }
     this.Search = new Search(this, locale);
     this.User = new User(this);
+    this.Playlist = new Playlist(this, locale);
   }
 
   initSession(scopes, redirectURL) {
     this.Session = new Session(this, clientID, clientSecret, scopes, redirectURL);
   }
-
-  async createPlaylist() {}
 }
 
 module.exports = SpotifyClient;
